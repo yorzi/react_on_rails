@@ -142,6 +142,8 @@ module ReactOnRailsHelper
   def server_rendered_react_component_html(options, props_string, react_component_name, data_variable_name, dom_id)
     return ["", ""] unless prerender(options)
 
+    # On server `location` option is added (`location = request.fullpath`)
+    # React Router needs this to match the current route
     wrapper_js = <<-JS
 (function() {
   var props = #{props_string};
