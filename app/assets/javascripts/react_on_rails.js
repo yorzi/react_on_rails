@@ -64,13 +64,14 @@
     var props = options.props;
     var trace = options.trace;
     var generatorFunction = options.generatorFunction;
+    var location = options.location;
 
     var htmlResult = '';
     var consoleReplay = '';
 
     try {
       var reactElement = createReactElement(componentName, propsVarName, props,
-        domId, trace, generatorFunction);
+        domId, trace, generatorFunction, location);
       htmlResult = provideServerReact().renderToString(reactElement);
     }
     catch (e) {
@@ -156,14 +157,14 @@
     return consoleReplay;
   };
 
-  function createReactElement(componentName, propsVarName, props, domId, trace, generatorFunction) {
+  function createReactElement(componentName, propsVarName, props, domId, trace, generatorFunction, location) {
     if (trace) {
       console.log('RENDERED ' + componentName + ' with data_variable ' +
         propsVarName + ' to dom node with id: ' + domId);
     }
 
     if (generatorFunction) {
-      return this[componentName](props);
+      return this[componentName](props, location);
     } else {
       return React.createElement(this[componentName], props);
     }

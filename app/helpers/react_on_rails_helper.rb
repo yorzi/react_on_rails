@@ -151,7 +151,8 @@ module ReactOnRailsHelper
     propsVarName: '#{data_variable_name}',
     props: props,
     trace: #{trace(options)},
-    generatorFunction: #{generator_function(options)}
+    generatorFunction: #{generator_function(options)},
+    location: '#{request.fullpath}'
   });
 })()
     JS
