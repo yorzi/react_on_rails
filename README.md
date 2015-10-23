@@ -23,12 +23,12 @@ Supports:
 4. Redux
 5. Turbolinks
 6. Server side rendering with fragment caching
-7. react-router for client side rendering (and server side very soon)
+7. react-router for client-side rendering (and server-side very soon)
 
 ## OPEN ISSUES
 1. Almost all the open issues are nice to haves like more tests.
 2. If you want to work on any of the open issues, please comment on the issue. My team is mentoring anybody that's trying to help with the issues.
-3. Longer term, we hope to put in many conveniences into this gem, in terms of Webpack + Rails integration. We're open to suggestions.
+3. Longer term, we hope to put in many conveniences into this gem, in terms of webpack + Rails integration. We're open to suggestions.
 
 ## Links
 1. See https://github.com/shakacode/react-webpack-rails-tutorial/ for how to integrate it!
@@ -41,14 +41,14 @@ products, client work, and open source. [More info here](http://www.shakacode.co
 ## How is different than the [react-rails gem](https://github.com/reactjs/react-rails)?
 1. `react_on_rails` depends on [webpack](http://webpack.github.io/). `react-rails` integrates closely with sprockets and
     helps you integrate JSX and the react code into a Rails project.
-2. Likewise, using Webpack as shown in the [react-webpack-rails-tutorial](https://github.com/justin808/react-webpack-rails-tutorial/)
+2. Likewise, using webpack as shown in the [react-webpack-rails-tutorial](https://github.com/justin808/react-webpack-rails-tutorial/)
    does involve some extra setup. However, we feel that tight and simple integration with the node ecosystem is more than
    worth any minor setup costs.
 3. `react-rails` depends on `jquery-ujs` for client side rendering. `react_on_rails` has it's own JS code that does not
    depend on jquery.
 
 ## Installation Checklist
-1. Include the gems `react_on_rails` and `therubyracer` like [this](https://github.com/shakacode/react-webpack-rails-tutorial/blob/361f4338ebb39a5d3934b00cb6d6fcf494773000/Gemfile#L42) and run `bundle`. Note, you can sustitute your preferable JavaScript engine.
+1. Include the gems `react_on_rails` and `therubyracer` like [this](https://github.com/shakacode/react-webpack-rails-tutorial/blob/361f4338ebb39a5d3934b00cb6d6fcf494773000/Gemfile#L42) and run `bundle`. Note, you can substitute your preferable JavaScript engine.
   
   ```ruby
   gem "react_on_rails"
@@ -56,16 +56,16 @@ products, client work, and open source. [More info here](http://www.shakacode.co
   ```
 
 ### Installing With The Generators
-1. The install generator will get you started with the necessary directories and conifgurations.
+1. The install generator will get you started with the necessary directories and configurations.
    ```
    rails generate react_on_rails:install
    ```
 
-   This will create a client directory in your application root path that contains directories for your React files and Webpack, NPM, and linting configurations.
+   This will create a client directory in your application root path that contains directories for your React files and webpack, NPM, and linting configurations.
 
-   The config file will be copied to ```config/initializers/react_on_rails.rb```.
+   The config file will be copied to `config/initializers/react_on_rails.rb`.
 
-   Foreman can be run with ```foreman start -f Procfile.dev```
+   Foreman can be run with `foreman start -f Procfile.dev`
 
 #### Optional Generator Parameters
 1. Server rendering:
