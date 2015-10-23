@@ -35,14 +35,24 @@ describe InstallGenerator, type: :generator do
       match << "some existing text\n"
       assert_file "app/assets/javascripts/application.js", match
     end
+
+    it "adds to gemfile" do
+      match = "\n"
+      match << "group :development do\n"
+      match << "  gem 'rubocop'\n"
+      match << "  gem 'scss_lint'\n"
+      match << "  gem 'ruby-lint'\n"
+      match << "end\n"
+      assert_file "Gemfile", match
+    end
   end
 
   context "with no arguments" do
     before(:all) do
       prepare_destination # this completely wipes the `destination` directory
       simulate_existing_file(".gitignore")
-      simulate_existing_file("Gemfile")
       simulate_existing_file("app/assets/javascripts/application.js")
+      simulate_existing_file("Gemfile", "")
       run_generator
     end
 
@@ -54,7 +64,7 @@ describe InstallGenerator, type: :generator do
     path = Pathname.new(File.join(destination_root, file))
     mkdir_p(path.dirname)
     File.open(path, "w+") do |f|
-      f.puts data
+      f.puts data if data.presence
     end
   end
 end
