@@ -1,4 +1,6 @@
 require "rails/generators"
+require File.expand_path("../generator_helper", __FILE__)
+include GeneratorHelper
 
 module ReactOnRails
   module Generators
@@ -7,35 +9,44 @@ module ReactOnRails
       source_root File.expand_path("../templates", __FILE__)
 
       def create_assets
-        empty_directory "client/assets/stylesheets"
-        create_link "client/assets/fonts", "../../app/assets/fonts" if Dir.exist?("app/assets/fonts")
-        create_link "client/assets/images", "../../app/assets/images" if
-        Dir.exist?("app/assets/images")
+        empty_directory_with_keep_file "client/assets/stylesheets"
+
+        # TODO: verify this is desired behavior (RW)
+        create_link "client/assets/fonts", "../../app/assets/fonts" if dest_dir_exists?("app/assets/fonts")
+        create_link "client/assets/images", "../../app/assets/images" if dest_dir_exists?("app/assets/images")
       end
 
       def update_git_ignore
-        append_to_file ".gitignore" do
-          "# React on Rails\nnpm-debug.log\nnode_modules\n\n# Generated js bundles\n/app/assets/javascripts/generated/*"
+        data = "# React on Rails\n"
+        data << "npm-debug.log\n"
+        data << "node_modules\n"
+        data << "\n"
+        data << "# Generated js bundles\n"
+        data << "/app/assets/javascripts/generated/*\n"
+
+        if dest_file_exists?(".gitignore")
+          append_to_file(".gitignore", data)
+        else
+          puts_setup_file_error(".gitignore", data)
         end
       end
 
       def update_application_js
-        data = ""
+        application_js = "app/assets/javascripts/application.js"
+        data = "\n"
         data << "// It is important that generated/vendor-bundle must be before"
-        data << " bootstrap since it is exposing jQuery and jQuery-ujs\n"
+        data << "bootstrap since it is exposing jQuery and jQuery-ujs\n"
         data << "//= require generated/vendor-bundle\n"
         data << "//= require generated/app-bundle\n"
-        data << "//= require react_on_rails\n\n"
-        if File.exist?("app/assets/javascripts/application.js")
-          prepend_to_file "app/assets/javascripts/application.js", data
-        elsif File.exist?("app/assets/javascripts/application.js.coffee")
-          prepend_to_file "app/assets/javascripts/application.js.coffee", data
+        data << "//= require react_on_rails\n"
+        data << "\n"
+
+        if dest_file_exists?(application_js)
+          prepend_to_file(application_js, data)
+        elsif dest_file_exists?(application_js + ".coffee")
+          prepend_to_file(application_js, data)
         else
-          msg = ""
-          msg << "** app/assets/javascripts/application.js was not found.\n"
-          msg << "Please add the following content to your main javascript "
-          msg << "file:\n\n#{data}\n\n"
-          puts msg
+          puts_setup_file_error("#{application_js} or #{application_js}.coffee", data)
         end
       end
 

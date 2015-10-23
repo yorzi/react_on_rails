@@ -66,6 +66,8 @@ module ReactOnRails
         end
       end
 
+      # NOTE: other requirements for existing files such as .gitignore or application.js(.coffee) are not checked
+      # by this method, but instead produce warning messages and allow the build to continue
       def check_requirements
         # check for node
         if `which node`.blank?

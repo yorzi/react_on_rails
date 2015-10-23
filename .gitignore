@@ -16,6 +16,7 @@
 /spec/dummy-react-013/app/assets/javascripts/generated/
 /spec/dummy-react-013/coverage/
 /spec/dummy/coverage/
+/spec/dummy-for-generators/
 
 # RVM
 .ruby-version
