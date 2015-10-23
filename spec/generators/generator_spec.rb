@@ -26,7 +26,7 @@ describe InstallGenerator, type: :generator do
 
     it "adds to application.js" do
       match = "\n"
-      match << "// It is important that generated/vendor-bundle must be before"
+      match << "// It is important that generated/vendor-bundle must be before "
       match << "bootstrap since it is exposing jQuery and jQuery-ujs\n"
       match << "//= require generated/vendor-bundle\n"
       match << "//= require generated/app-bundle\n"

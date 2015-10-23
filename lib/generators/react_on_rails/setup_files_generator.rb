@@ -34,7 +34,7 @@ module ReactOnRails
       def update_application_js
         application_js = "app/assets/javascripts/application.js"
         data = "\n"
-        data << "// It is important that generated/vendor-bundle must be before"
+        data << "// It is important that generated/vendor-bundle must be before "
         data << "bootstrap since it is exposing jQuery and jQuery-ujs\n"
         data << "//= require generated/vendor-bundle\n"
         data << "//= require generated/app-bundle\n"
