@@ -5,7 +5,7 @@ module GeneratorHelper
   end
 
   def dest_dir_exists?(dir)
-    Dir.exist?(File.join(destination_root, dir)) ? file : nil
+    Dir.exist?(File.join(destination_root, dir)) ? dir : nil
   end
 
   # Takes the missing file and the
@@ -24,5 +24,20 @@ module GeneratorHelper
 
   def keep_file(destination)
     create_file("#{destination}/.keep") unless options[:skip_keeps]
+  end
+
+  def invoke_with_options(generator_name)
+    invoke "react_on_rails:#{generator_name}", nil, nil, options
+  end
+
+  # As opposed to Rails::Generators::Testing.create_link, which creates a link pointing to
+  # source_root, this symlinks a file in destination_root to a file also in
+  # destination_root.
+  def symlink_dest_file_to_dest_file(target, link)
+    link_path = Pathname.new(File.join(destination_root, link))
+    Dir.chdir(link_path.dirname) do
+      target_file = File.join(destination_root, target)
+      File.symlink(target_file, link_path.basename)
+    end
   end
 end

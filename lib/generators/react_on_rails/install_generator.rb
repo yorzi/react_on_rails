@@ -1,6 +1,4 @@
-# Install Generator
-# This generator is the only visible generator in the rails generate list and
-# should be the only one used.
+# Install Generator: gem's only public generator
 #
 # Usage:
 #   rails generate react_on_rails:install [options]
@@ -10,6 +8,8 @@
 #     Indicates when to generate with redux
 #   [--with-hello-world-example], [--no-with-hello-world-example]
 #     Indicates when to generate with hello world example
+#   [--with-server-rendering], [--no-with-server-rendering]
+#     Indicates whether ability for server-side rendering of webpack output should be enabled
 #
 require "rails/generators"
 
@@ -20,68 +20,46 @@ module ReactOnRails
       class_option :with_redux,
                    type: :boolean,
                    default: false,
-                   description: "Include Redux package"
+                   desc: "Include Redux package"
       # --with-hello-world-example
       class_option :with_hello_world_example,
                    type: :boolean,
                    default: false,
-                   description: "Include a Hello World Example"
+                   desc: "Include a simple Hello World Example. Note that this example's implementation varies depending on the other options chosen."
       # --with-server-rendering
       class_option :with_server_rendering,
                    type: :boolean,
                    default: false,
-                   description: "Include server rendering support"
+                   desc: "Adds configuration files allowing for server-side rendering of webpack's JavaScript output"
 
       def run_generators
-        return if check_requirements == false
-        if options.with_server_rendering?
-          run_with_server_rendering
-        else
-          run_without_server_rendering
-        end
+        return unless installation_prerequisites_met?
+        invoke "react_on_rails:react"
+        invoke "react_on_rails:linters"
+        invoke "react_on_rails:hello_world_example" if options.with_hello_world_example?
       end
 
-      protected
-
-      def run_without_server_rendering
-        if options.with_redux?
-          invoke "react_on_rails:install_react_with_redux"
-        elsif options.with_hello_world_example?
-          invoke "react_on_rails:install_react_with_hello_world"
-        else
-          invoke "react_on_rails:install_react"
-        end
-      end
-
-      def run_with_server_rendering
-        if options.with_redux?
-          invoke "react_on_rails:install_react_with_redux",
-                 ["--with-server-rendering"]
-        elsif options.with_hello_world_example?
-          invoke "react_on_rails:install_react_with_hello_world",
-                 ["--with-server-rendering"]
-        else
-          invoke "react_on_rails:install_react",
-                 ["--with-server-rendering"]
-        end
-      end
+      private
 
       # NOTE: other requirements for existing files such as .gitignore or application.js(.coffee) are not checked
       # by this method, but instead produce warning messages and allow the build to continue
-      def check_requirements
-        # check for node
-        if `which node`.blank?
-          error = "** nodejs is required. Please install it before continuing."
-          error << "https://nodejs.org/en/"
-          puts error
-        end
-        # check for npm
-        if `which npm`.blank?
-          error = "** npm is required. Please install it before continuing."
-          error << "https://www.npmjs.com/"
-          puts error
-        end
-        return false if error
+      def installation_prerequisites_met?
+        return true unless missing_node? || missing_npm?
+      end
+
+      # TODO: I'm pretty sure NPM is packaged with Node so this may be redundant (RW)
+      def missing_npm?
+        return false unless `which npm`.blank?
+        error = "** npm is required. Please install it before continuing."
+        error << "https://www.npmjs.com/"
+        puts error
+      end
+
+      def missing_node?
+        return false unless `which node`.blank?
+        error = "** nodejs is required. Please install it before continuing."
+        error << "https://nodejs.org/en/"
+        puts error
       end
     end
   end
