@@ -15,15 +15,15 @@ module ReactOnRails
       end
 
       def copy_linter_config_files
-        copy_file "client/.eslintrc", "client/.eslintrc"
-        copy_file "client/.eslintignore", "client/.eslintignore"
-        copy_file "client/.jscsrc", "client/.jscsrc"
+        %w(client/.eslintrc
+           client/.eslintignore
+           client/.jscsrc).each { |file| copy_file(file) }
       end
 
       def copy_linting_and_audting_tasks
-        copy_file "lib/tasks/brakeman.rake", "lib/tasks/brakeman.rake"
-        copy_file "lib/tasks/ci.rake", "lib/tasks/ci.rake"
-        copy_file "lib/tasks/linters.rake", "lib/tasks/linters.rake"
+        %w(lib/tasks/brakeman.rake
+           lib/tasks/ci.rake
+           lib/tasks/linters.rake).each { |file| copy_file(file) }
       end
     end
   end

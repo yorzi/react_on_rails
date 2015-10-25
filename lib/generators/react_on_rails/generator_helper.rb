@@ -10,11 +10,7 @@ module GeneratorHelper
 
   # Takes the missing file and the
   def puts_setup_file_error(file, data)
-    msg = ""
-    msg << "** #{file} was not found.\n"
-    msg << "Please add the following content to your .gitignore file"
-    msg << "file:\n\n#{data}\n\n"
-    puts msg
+    puts "** #{file} was not found.\nPlease add the following content to your #{file} file:\n\n#{data}\n\n"
   end
 
   def empty_directory_with_keep_file(destination, config = {})
@@ -26,10 +22,6 @@ module GeneratorHelper
     create_file("#{destination}/.keep") unless options[:skip_keeps]
   end
 
-  def invoke_with_options(generator_name)
-    invoke "react_on_rails:#{generator_name}", nil, nil, options
-  end
-
   # As opposed to Rails::Generators::Testing.create_link, which creates a link pointing to
   # source_root, this symlinks a file in destination_root to a file also in
   # destination_root.
@@ -39,5 +31,12 @@ module GeneratorHelper
       target_file = File.join(destination_root, target)
       File.symlink(target_file, link_path.basename)
     end
+  end
+
+  def copy_file_and_missing_parent_directories(source_file, destination_file)
+    destination_path = Pathname.new(destination_file)
+    parent_directories = destination_path.dirname
+    empty_directory(parent_directories) unless dest_dir_exists?(parent_directories)
+    copy_file source_file, destination_file
   end
 end

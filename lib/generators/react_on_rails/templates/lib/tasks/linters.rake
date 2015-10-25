@@ -1,12 +1,8 @@
 if %w(development test).include? Rails.env
   namespace :lint do
-    # require "rubocop/rake_task"
-    # require "slim_lint/rake_task"
-    # require "scss_lint/rake_task"
-
     # This fails: https://github.com/bbatsov/rubocop/issues/1840
     # RuboCop::RakeTask.new
-
+    # require "rubocop/rake_task"
     desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
     task :rubocop, [:fix] => [] do |_t, args|
       def to_bool(str)
@@ -28,10 +24,6 @@ if %w(development test).include? Rails.env
       sh cmd
     end
 
-    # SlimLint::RakeTask.new do |t|
-    #   t.files = ["app/views"]
-    # end
-
     desc "eslint"
     task :eslint do
       cmd = "cd client && npm run eslint . -- --ext .jsx,.js"
@@ -51,8 +43,20 @@ if %w(development test).include? Rails.env
       puts "Completed running all JavaScript Linters"
     end
 
+    # desc "haml_lint"
+    # task :haml_lint do
+    #   require 'haml_lint/rake_task'
+
+    #   HamlLint::RakeTask.new do |t|
+    #     t.files = ["app/views"]
+    #   end
+    # end
+
     # desc "See docs for task 'slim_lint'"
     # task slim: :slim_lint
+    # SlimLint::RakeTask.new do |t|
+    #   t.files = ["app/views"]
+    # end
 
     desc "See docs for task 'scss_lint'"
     task :scss do

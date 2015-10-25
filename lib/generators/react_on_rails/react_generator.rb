@@ -6,7 +6,7 @@ module ReactOnRails
   module Generators
     class ReactGenerator < Rails::Generators::Base
       hide!
-      source_root File.expand_path("../templates", __FILE__)
+      source_root(File.expand_path("../templates", __FILE__))
 
       # --with-redux
       class_option :with_redux,
@@ -34,31 +34,31 @@ module ReactOnRails
       end
 
       def update_git_ignore
-        data = "# React on Rails\n"
-        data << "npm-debug.log\n"
-        data << "node_modules\n"
-        data << "\n"
-        data << "# Generated js bundles\n"
-        data << "/app/assets/javascripts/generated/*\n"
+        data = <<-DATA.strip_heredoc
+          # React on Rails
+          npm-debug.log
+          node_modules
 
-        if dest_file_exists?(".gitignore")
-          append_to_file(".gitignore", data)
-        else
-          puts_setup_file_error(".gitignore", data)
-        end
+          # Generated js bundles
+          /app/assets/javascripts/generated/*
+        DATA
+
+        dest_file_exists?(".gitignore") ? append_to_file(".gitignore", data) : puts_setup_file_error(".gitignore", data)
       end
 
       def update_application_js
-        data = "\n"
         # TODO: do we need this in here if we are not generating bootstrap?
         # Do we need to sign this as coming from the react_on_rails gem as
         # there may be other boilerplate comments in here?
-        data << "// It is important that generated/vendor-bundle must be before "
-        data << "bootstrap since it is exposing jQuery and jQuery-ujs\n"
-        data << "//= require generated/vendor-bundle\n"
-        data << "//= require generated/app-bundle\n"
-        data << "//= require react_on_rails\n"
-        data << "\n"
+        data = <<-DATA.strip_heredoc
+
+          // It is important that generated/vendor-bundle must be before bootstrap
+          // since it is exposing jQuery and jQuery-ujs
+          //= require generated/vendor-bundle
+          //= require generated/app-bundle
+          //= require react_on_rails
+
+        DATA
 
         application_js_path = "app/assets/javascripts/application.js"
         application_js = dest_file_exists?(application_js_path) || dest_file_exists?(application_js_path + ".coffee")
@@ -71,61 +71,50 @@ module ReactOnRails
 
       def create_react_directories
         dirs = %w(actions components constants middlewares startup utils)
-        dirs.each { |name| empty_directory_with_keep_file "client/app/#{name}" }
+        dirs.each { |name| empty_directory_with_keep_file("client/app/#{name}") }
       end
 
       def copy_base_files
         template "react_on_rails.rb", "config/initializers/react_on_rails.rb"
-        copy_file "lib/tasks/assets.rake", "lib/tasks/assets.rake"
-        copy_file "client/README.md", "client/README.md"
-        copy_file "client/server.js", "client/server.js"
-        copy_file "client/.babelrc", "client/.babelrc"
-        copy_file "client/webpack.client.base.config.js", "client/webpack.client.base.config.js"
-        copy_file "client/webpack.client.hot.config.js", "client/webpack.client.hot.config.js"
-        copy_file "client/webpack.client.rails.config.js", "client/webpack.client.rails.config.js"
-        copy_file "README"
+        %w(
+          lib/tasks/assets.rake
+          client/server.js
+          client/.babelrc
+          client/webpack.client.base.config.js
+          client/webpack.client.hot.config.js
+          client/webpack.client.rails.config.js
+        ).each { |file| copy_file(file) }
+        template("README.md.tt")
       end
 
       def copy_appropriate_package_json
-        if options.with_redux?
-          copy_file "client/redux_package.json", "client/package.json"
-        else
-          copy_file "client/package.json", "client/package.json"
-        end
+        source = options.with_redux? ? "client/redux_package.json" : "client/package.json"
+        copy_file(source, "client/package.json")
       end
 
-      def copy_appropriate_globals
-        if options.with_hello_world_example?
-          copy_file "hello_world_base/client/app/startup/clientGlobals.jsx", "client/app/startup/clientGlobals.jsx"
-        else
-          copy_file "client/app/startup/clientGlobals.jsx", "client/app/startup/clientGlobals.jsx"
-        end
-        return unless options.with_server_rendering?
+      def copy_appropriate_client_globals
+        base = options.with_hello_world_example? ? "hello_world_base/" : ""
+        copy_file("#{base}client/app/startup/clientGlobals.jsx", "client/app/startup/clientGlobals.jsx")
+      end
 
-        if options.with_hello_world_example?
-          copy_file "hello_world_server_render/client/app/startup/serverGlobals.jsx",
-                    "client/app/startup/serverGlobals.jsx"
-        else
-          copy_file "client/app/startup/serverGlobals.jsx", "client/app/startup/serverGlobals.jsx"
-        end
+      def copy_appropriate_server_globals
+        return unless options.with_server_rendering?
+        base = options.with_hello_world_example? ? "hello_world_server_render/" : ""
+        copy_file("#{base}client/app/startup/serverGlobals.jsx", "client/app/startup/serverGlobals.jsx")
       end
 
       def copy_appropriate_index_jade
-        if options.with_hello_world_example?
-          copy_file "hello_world_base/client/index.jade", "client/index.jade"
-        else
-          copy_file "client/index.jade", "client/index.jade"
-        end
+        base = options.with_hello_world_example? ? "hello_world_base/" : ""
+        copy_file("#{base}client/index.jade", "client/index.jade")
       end
 
       def copy_appropriate_procfile
-        dev_procfile = options.with_server_rendering? ? "Procfile.dev.server" : "Procfile.dev.client"
-        copy_file dev_procfile, "Procfile.dev"
+        template("Procfile.dev")
       end
 
       def install_server_rendering_files_if_enabled
         return unless options.with_server_rendering?
-        copy_file "client/webpack.server.rails.config.js", "client/webpack.server.rails.config.js"
+        copy_file("client/webpack.server.rails.config.js")
       end
     end
   end

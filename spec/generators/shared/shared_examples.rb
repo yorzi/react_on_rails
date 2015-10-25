@@ -7,25 +7,29 @@ shared_examples ":react:base" do
   end
 
   it "updates the .gitignore file" do
-    match = "some existing text\n"
-    match << "# React on Rails\n"
-    match << "npm-debug.log\n"
-    match << "node_modules\n"
-    match << "\n"
-    match << "# Generated js bundles\n"
-    match << "/app/assets/javascripts/generated/*\n"
+    match = <<-MATCH.strip_heredoc
+      some existing text
+      # React on Rails
+      npm-debug.log
+      node_modules
+
+      # Generated js bundles
+      /app/assets/javascripts/generated/*
+    MATCH
     assert_file ".gitignore", match
   end
 
   it "updates application.js" do
-    match = "\n"
-    match << "// It is important that generated/vendor-bundle must be before "
-    match << "bootstrap since it is exposing jQuery and jQuery-ujs\n"
-    match << "//= require generated/vendor-bundle\n"
-    match << "//= require generated/app-bundle\n"
-    match << "//= require react_on_rails\n"
-    match << "\n"
-    match << "some existing text\n"
+    match = <<-MATCH.strip_heredoc
+
+      // It is important that generated/vendor-bundle must be before bootstrap
+      // since it is exposing jQuery and jQuery-ujs
+      //= require generated/vendor-bundle
+      //= require generated/app-bundle
+      //= require react_on_rails
+
+      some existing text
+    MATCH
     assert_file "app/assets/javascripts/application.js", match
   end
 
@@ -39,7 +43,6 @@ shared_examples ":react:base" do
     assert_file "lib/tasks/assets.rake"
     assert_file "client/package.json"
     assert_file "client/package.json"
-    assert_file "client/README.md"
     assert_file "client/server.js"
     assert_file "client/.babelrc"
     assert_file "client/webpack.client.base.config.js"
@@ -47,19 +50,22 @@ shared_examples ":react:base" do
     assert_file "client/webpack.client.rails.config.js"
     assert_file "client/app/startup/clientGlobals.jsx"
     assert_file "client/index.jade"
-    assert_file "README"
+    assert_file "README.md"
   end
 end
 
 shared_examples ":linters" do
   it "adds linter gems" do
-    match = "\n"
-    match << "group :development do\n"
-    match << "  gem 'rubocop'\n"
-    match << "  gem 'scss_lint'\n"
-    match << "  gem 'ruby-lint'\n"
-    match << "end\n"
-    assert_file "Gemfile", match
+    match = <<-MATCH.strip_heredoc
+
+      group :development do
+        gem 'rubocop'
+        gem 'scss_lint'
+        gem 'ruby-lint'
+      end
+    MATCH
+
+    assert_file("Gemfile", match)
   end
 
   it "copies linter config files" do
@@ -118,18 +124,23 @@ shared_examples ":hello_world_example:base" do
   end
 
   it "copies pages_controller.rb" do
-    assert_file "app/controllers/pages_controller.rb"
+    assert_file "app/controllers/hello_world_controller.rb"
   end
 
-  it "adds a route for get 'hello_world' to 'pages#index'" do
-    match = "Rails.application.routes.draw do\n"
-    match << "  get 'hello_world', to: 'pages#index'\n"
-    match << "end\n"
+  it "adds a route for get 'hello_world' to 'hello_world#index'" do
+    match = <<-MATCH.strip_heredoc
+      Rails.application.routes.draw do
+        get 'hello_world', to: 'hello_world#index'
+      end
+    MATCH
     assert_file "config/routes.rb", match
   end
 
-  it "copies README_HELLO_WORLD.md" do
-    assert_file "README_HELLO_WORLD.md"
+  it "has hello_world information in README.md" do
+    assert_file("README.md") do |contents|
+      assert_match(%r{-"Hello World" example: `localhost:3000/hello_world`
+-Webpack Development Server with Hot Module Reload: `localhost:4000`}, contents)
+    end
   end
 end
 
@@ -141,7 +152,7 @@ shared_examples ":hello_world_example" do
   end
 
   it "copies hello_world_client_render version of files" do
-    assert_file "app/views/pages/index.html.erb" do |contents|
+    assert_file "app/views/hello_world/index.html.erb" do |contents|
       refute_match(/Server Rendering/, contents)
     end
   end
@@ -159,7 +170,7 @@ shared_examples ":hello_world_example:server_rendering" do
   end
 
   it "copies server-side rendering version of app files" do
-    assert_file "app/views/pages/index.html.erb" do |contents|
+    assert_file "app/views/hello_world/index.html.erb" do |contents|
       assert_match(/Server Rendering/, contents)
     end
   end
