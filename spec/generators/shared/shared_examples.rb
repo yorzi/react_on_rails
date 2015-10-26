@@ -50,7 +50,7 @@ shared_examples ":react:base" do
     assert_file "client/webpack.client.rails.config.js"
     assert_file "client/app/startup/clientGlobals.jsx"
     assert_file "client/index.jade"
-    assert_file "README.md"
+    assert_file "REACT_ON_RAILS.md"
   end
 end
 
@@ -137,7 +137,7 @@ shared_examples ":hello_world_example:base" do
   end
 
   it "has hello_world information in README.md" do
-    assert_file("README.md") do |contents|
+    assert_file("REACT_ON_RAILS.md") do |contents|
       assert_match(%r{-"Hello World" example: `localhost:3000/hello_world`
 -Webpack Development Server with Hot Module Reload: `localhost:4000`}, contents)
     end

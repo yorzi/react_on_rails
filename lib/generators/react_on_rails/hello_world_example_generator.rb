@@ -7,12 +7,12 @@ module ReactOnRails
       source_root File.expand_path("../templates", __FILE__)
 
       # --with-redux
-      class_option :with_redux,
+      class_option :redux,
                    type: :boolean,
                    default: false,
                    description: "Include Redux package"
       # --with-server-rendering
-      class_option :with_server_rendering,
+      class_option :server_rendering,
                    type: :boolean,
                    default: false,
                    description: "Enable server-rendering"
@@ -29,13 +29,13 @@ module ReactOnRails
       end
 
       def copy_client_rendering_only_files
-        return if options.with_server_rendering?
+        return if options.server_rendering?
         copy_file("hello_world_client_render/app/views/hello_world/index.html.erb",
                   "app/views/hello_world/index.html.erb")
       end
 
       def copy_server_rendering_only_files
-        return unless options.with_server_rendering?
+        return unless options.server_rendering?
         copy_file_and_missing_parent_directories("hello_world_server_render/app/views/hello_world/index.html.erb",
                                                  "app/views/hello_world/index.html.erb")
       end

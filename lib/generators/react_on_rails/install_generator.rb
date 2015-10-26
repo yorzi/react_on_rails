@@ -17,18 +17,18 @@ module ReactOnRails
   module Generators
     class InstallGenerator < Rails::Generators::Base
       # --with-redux
-      class_option :with_redux,
+      class_option :redux,
                    type: :boolean,
                    default: false,
                    desc: "Include Redux package"
       # --with-hello-world-example
-      class_option :with_hello_world_example,
+      class_option :hello_world_example,
                    type: :boolean,
                    default: false,
-                   desc: "Include a simple Hello World Example. Note that this example's implementation varies "\
-                         "depending on the other options chosen."
+                   desc: "Include a simple Hello World Example. Note that this example's implementation varies\n"\
+                         "depending on the other options chosen (e.g. '--server-rendering')"
       # --with-server-rendering
-      class_option :with_server_rendering,
+      class_option :server_rendering,
                    type: :boolean,
                    default: false,
                    desc: "Adds configuration files allowing for server-side rendering of webpack's JavaScript output"
@@ -38,7 +38,7 @@ module ReactOnRails
         warn_if_nvm_is_not_installed
         invoke "react_on_rails:react"
         invoke "react_on_rails:linters"
-        invoke "react_on_rails:hello_world_example" if options.with_hello_world_example?
+        invoke "react_on_rails:hello_world_example" if options.hello_world_example?
       end
 
       private
@@ -65,7 +65,9 @@ module ReactOnRails
       end
 
       def warn_if_nvm_is_not_installed
-        puts "** nvm is advised. Please consider installing it. https://github.com/creationix/nvm" if `which nvm`.blank?
+        if `which nvm`.blank?
+          puts "** nvm is advised. Please consider installing it. https://github.com/creationix/nvm"
+        end
       end
     end
   end

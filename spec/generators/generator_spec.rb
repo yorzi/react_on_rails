@@ -21,42 +21,42 @@ describe InstallGenerator, type: :generator do
     include_examples ":linters"
   end
 
-  context "--with_server_rendering" do
-    before { run_generator %w(--with-server-rendering) }
+  context "--server_rendering" do
+    before { run_generator %w(--server-rendering) }
     include_examples ":react:server_rendering"
     include_examples ":linters"
   end
 
-  context "--with-redux" do
-    before { run_generator %w(--with-redux) }
+  context "--redux" do
+    before { run_generator %w(--redux) }
     include_examples ":react"
     include_examples ":linters"
     include_examples ":redux"
   end
 
-  context "--with_redux --with-server-rendering" do
-    before { run_generator %w(--with-redux --with-server-rendering) }
+  context "--redux --server-rendering" do
+    before { run_generator %w(--redux --server-rendering) }
     include_examples ":react:server_rendering"
     include_examples ":linters"
     include_examples ":redux"
   end
 
-  context "--with-hello-world-example" do
-    before { run_generator %w(--with-hello-world-example) }
+  context "--hello-world-example" do
+    before { run_generator %w(--hello-world-example) }
     include_examples ":react"
     include_examples ":linters"
     include_examples ":hello_world_example"
   end
 
-  context "--with-hello-world-example --with-server-rendering" do
-    before { run_generator %w(--with-hello-world-example --with-server-rendering) }
+  context "--hello-world-example --server-rendering" do
+    before { run_generator %w(--hello-world-example --server-rendering) }
     include_examples ":react:server_rendering"
     include_examples ":linters"
     include_examples ":hello_world_example:server_rendering"
   end
 
   # # TODO
-  # context "--with_redux --with_hello_world_example --with_server_rendering" do
+  # context "--with_redux --with_hello_world_example --ith_server_rendering" do
   # end
 
   # Simulate having an existing file for cases where the generator needs to modify, not create, a file

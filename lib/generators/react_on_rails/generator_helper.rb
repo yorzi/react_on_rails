@@ -10,7 +10,9 @@ module GeneratorHelper
 
   # Takes the missing file and the
   def puts_setup_file_error(file, data)
-    puts "** #{file} was not found.\nPlease add the following content to your #{file} file:\n\n#{data}\n\n"
+    puts "** #{file} was not found."
+    puts "Please add the following content to your #{file} file:"
+    puts "\n#{data}\n"
   end
 
   def empty_directory_with_keep_file(destination, config = {})

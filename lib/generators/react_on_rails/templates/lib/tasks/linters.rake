@@ -3,7 +3,7 @@ if %w(development test).include? Rails.env
     # This fails: https://github.com/bbatsov/rubocop/issues/1840
     # RuboCop::RakeTask.new
     # require "rubocop/rake_task"
-    desc "Run Rubocop lint as shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
+    desc "Run Rubocop lint in shell. Specify option fix to auto-correct (and don't have uncommitted files!)."
     task :rubocop, [:fix] => [] do |_t, args|
       def to_bool(str)
         return true if str =~ (/^(true|t|yes|y|1)$/i)

@@ -1,0 +1,122 @@
+
+The `react_on_rails` gem has been installed. Check out our
+[example application](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/server.js)
+ for a live example and code.
+
+# Getting Started
+
+-run 'foreman start -f Procfile.dev'
+<%- if options.hello_world_example? %>
+-"Hello World" example: `localhost:3000/hello_world`
+-Webpack Development Server with Hot Module Reload: `localhost:4000`
+<%- end %>
+
+# Webpack
+Your webpack installation is inside the `client` folder. Webpack will compile your code and output the bundled
+results to `app/assets/javascripts/generated`. These generated bundle files have been added to your `.gitignore`
+for convenience. These files have been inclued in the `application.js` manifest file and will be included in your views.
+
+## Building the Bundles
+Each time you change your `client/*` code, you will need to re-generate the bundles for Rails to use. This is done by
+running the build script in `client/package.json`:
+
+<%- if options.server_rendering? %>
+```bash
+npm run build:server
+```
+<%- else %>
+```bash
+cd client
+npm run build:client
+```
+<%- end %>
+
+# Working with Webpack's Dev Server when Developing Your Client App
+While developing your client code, you *could* simply re-build anytime you make a change, boot up your Rails server,
+and view the result. However, you would be missing out on the
+[benefits of webpack's dev server](https://webpack.github.io/docs/webpack-dev-server.html) and its
+[hot module replacement](https://webpack.github.io/docs/hot-module-replacement-with-webpack.html) feature.
+
+Instead of going through Rails, the dev server will load `client/index.jade`. You will need to configure this
+file to load your client app inside of a `script` tag. Then, all you need to do is run the build script:
+
+<%- if options.server_rendering? %>
+```bash
+npm run build:dev:server
+```
+<%- else %>
+```bash
+npm run build:dev:client
+```
+<%- end %>
+
+Again, you can find this build script inside of `client/package.json`.Hot module replacement is enabled. You can view
+ the dev server code in `client/server.js`. To start the dev server:
+
+```bash
+cd client
+npm start
+```
+
+Open your browser to `localhost:4000`. Whenever you make changes to your JavaScript code in the `client` folder,
+they will automatically show up in the browser.
+
+## Adding additional routes
+As you add more routes to your front-end application, you will need to make the corresponding API for the
+dev server in `client/server.js`. See our example `server.js` from our
+[tutorial](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/server.js).
+
+
+<%- if options.linters? %>
+# Linters
+Linters have been added to your gemfile and linter tasks to your `lib/tasks` folder. Running all linters:
+
+```bash
+rake lint
+```
+<%- end %>
+
+# Node Modules
+## Updating
+
+To update, first update all packages globally:
+
+```bash
+npm install -g npm-check-updates
+```
+
+Then update local dependencies:
+
+```bash
+# Make sure you are in the top directory, then run:
+cd client
+rm npm-shrinkwrap.json
+npm-check-updates -u
+npm install
+npm prune
+npm shrinkwrap
+```
+
+Confirm that the hot reload server and the rails server both work fine. You
+may have to delete `node_modules` and `npm-shrinkwrap.json` and then run `npm
+shrinkwrap`.
+
+*Note: `npm prune` is required before running `npm shrinkwrap` to remove dependencies that are no longer
+needed after doing updates.*
+
+## dependencies vs. devDependencies
+As usual, those dependencies needed for your code to build and run correctly should be saved as `dependencies`.
+Other dependencies, such as linters or test frameworks that are only needed in development can be saved to
+`devDependencies`.
+
+## Adding New Dependencies
+Adding a new dependency may require removing and re-running `npm shrinkwrap`:
+
+```bash
+cd client
+npm install --save module_name@version
+# or
+# npm install --save_dev module_name@version
+rm npm-shrinkwrap.json
+npm shrinkwrap
+```
