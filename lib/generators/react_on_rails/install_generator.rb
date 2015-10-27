@@ -49,7 +49,6 @@ module ReactOnRails
         return true unless missing_node? || missing_npm?
       end
 
-      # TODO: I'm pretty sure NPM is packaged with Node so this may be redundant (RW)
       def missing_npm?
         return false unless `which npm`.blank?
         error = "** npm is required. Please install it before continuing."
@@ -65,9 +64,8 @@ module ReactOnRails
       end
 
       def warn_if_nvm_is_not_installed
-        if `which nvm`.blank?
-          puts "** nvm is advised. Please consider installing it. https://github.com/creationix/nvm"
-        end
+        return true unless `which nvm`.blank?
+        puts "** nvm is advised. Please consider installing it. https://github.com/creationix/nvm"
       end
     end
   end
