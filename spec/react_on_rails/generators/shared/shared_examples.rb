@@ -139,7 +139,7 @@ shared_examples ":hello_world_example:base" do
   it "has hello_world information in README.md" do
     assert_file("REACT_ON_RAILS.md") do |contents|
       assert_match(%r{-"Hello World" example: `localhost:3000/hello_world`
--Webpack Development Server with Hot Module Reload: `localhost:4000`}, contents)
+-"Hello World" example via Webpack Development Server with Hot Module Reload: `localhost:4000`}, contents)
     end
   end
 end

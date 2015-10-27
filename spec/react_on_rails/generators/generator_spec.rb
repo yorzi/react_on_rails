@@ -1,7 +1,7 @@
-# require "spec_helper"
+require "react_on_rails/simplecov_helper"
 require "generator_spec" # let's us use Rails's generator testing helpers but with RSpec syntax
 require File.expand_path("../shared/shared_examples", __FILE__)
-require File.expand_path("../../../lib/generators/react_on_rails/install_generator", __FILE__)
+require File.expand_path("../../../../lib/generators/react_on_rails/install_generator", __FILE__)
 include ReactOnRails::Generators
 
 describe InstallGenerator, type: :generator do
