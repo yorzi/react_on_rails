@@ -2,9 +2,9 @@
 
 # React on Rails
 
-React on Rails integrates Facebook's [React](https://github.com/facebook/react) front-end framework with Rails. Currently, both React v0.14 and v0.13 are supported.
+React on Rails integrates Facebook's [React](https://github.com/facebook/react) front-end framework with Rails. Currently, both React v0.14 and v0.13 are supported. See the Rails on Maui [blog post](http://www.railsonmaui.com/blog/2014/10/03/integrating-webpack-and-the-es6-transpiler-into-an-existing-rails-project/) that started it all!
 
-Unlike the [react-rails](https://github.com/reactjs/react-rails) gem, which depends heavily on sprockets and jQuery, React on Rails uses [webpack](http://webpack.github.io/) and does not depend on jQuery. While the initial setup is slightly more involved, it allows for advanced functionality such as:
+Unlike the [react-rails](https://github.com/reactjs/react-rails) gem, which depends heavily on sprockets and jquery-ujs, React on Rails uses [webpack](http://webpack.github.io/) and does not depend on jQuery. While the initial setup is slightly more involved, it allows for advanced functionality such as:
 
 + Server-side rendering with fragment caching
 + [Turbolinks](https://github.com/rails/turbolinks)
