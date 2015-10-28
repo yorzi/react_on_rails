@@ -24,10 +24,11 @@ module ReactOnRails
       end
 
       def copy_hello_world_files
+        template("hello_world/app/views/hello_world/index.html.erb.tt", "app/views/hello_world/index.html.erb")
         copy_file("hello_world/app/controllers/hello_world_controller.rb", "app/controllers/hello_world_controller.rb")
+        return if options.redux? # see redux_generator for its hello_world example
         copy_file("hello_world/client/app/components/HelloWorld.jsx", "client/app/components/HelloWorld.jsx")
         copy_file("hello_world/client/app/startup/HelloWorldApp.jsx", "client/app/startup/HelloWorldApp.jsx")
-        template("hello_world/app/views/hello_world/index.html.erb.tt", "app/views/hello_world/index.html.erb")
       end
     end
   end

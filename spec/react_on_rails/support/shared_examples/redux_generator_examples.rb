@@ -61,6 +61,11 @@ shared_examples ":redux:hello_world_example" do
       refute_match(/react_component\("HelloWorld", {}, trace: true\)/, contents)
     end
   end
+
+  it "does not copy the non-redux hello world example" do
+    assert_no_file("client/app/components/HelloWorld.jsx")
+    assert_no_file("client/app/startup/HelloWorldApp.jsx")
+  end
 end
 
 shared_examples ":redux:server_rendering:hello_world_example" do

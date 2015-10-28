@@ -31,7 +31,6 @@ module ReactOnRails
         template("redux/client/app/startup/ClientReduxApp.jsx.tt", "client/app/startup/ClientReduxApp.jsx")
       end
 
-      # TODO: Refactor
       def copy_hello_world_example_files_if_approprirate
         return if options.skip_hello_world_example?
         copy_file("redux_and_hello_world/client/app/constants/HelloWorldConstants.jsx",
