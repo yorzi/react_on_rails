@@ -48,6 +48,10 @@ The generator installs your webpack files in the `client` folder. You then use w
 
 In most cases, you should then use the provided helper method to render the React component from your Rails views. In some cases, such as when SEO is vital or many users will not have JavaScript enabled, you can pass the `--server-rendering` option to the generator to configure your application for server-side rendering. Your JavaScript can then be first rendered on the server and passed to the client as HTML.
 
+In the following screenshot you can see the actual HTML rendered for a side-by-side comparison of a React component left as JavaScript for the client to render followed by the same component rendered on the server to HTML along with any console error messages generated:
+
+![Comparison of a normal React Component with its server-rendered version](https://cloud.githubusercontent.com/assets/1118459/10157268/41435186-6624-11e5-9341-6fc4cf35ee90.png)
+
 ### Building the Bundles
 Each time you change your client code, you will need to re-generate the bundles:
 
