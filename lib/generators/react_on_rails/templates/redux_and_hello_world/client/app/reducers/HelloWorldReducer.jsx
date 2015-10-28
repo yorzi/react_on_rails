@@ -2,7 +2,7 @@ import * as actionTypes from '../constants/HelloWorldConstants';
 
 const initialState = {
   lastActionType: null,
-  name: 'Alex',
+  name: 'CHANGE ME!',
 };
 
 // Why name function the same as the reducer?
