@@ -1,9 +1,9 @@
 <h1>Client Rendering</h1>
 <%- if options.redux? %>
-<%%= react_component("ReduxApp", trace: true) %>
+<%%= react_component("ReduxApp", {}, trace: true) %>
     <%- if options.server_rendering? %>
 <h1>Server Rendering</h1>
-<%%= react_component("ReduxApp", {}, prerender: true, trace: true) %>
+<%%= react_component("ReduxServerApp", {}, prerender: true, trace: true) %>
     <%- end %>
 <%- else %>
 <%%= react_component("HelloWorld", trace: true) %>
