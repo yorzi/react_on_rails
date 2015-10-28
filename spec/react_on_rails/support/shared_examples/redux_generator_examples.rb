@@ -28,9 +28,13 @@ shared_examples ":redux:server_rendering" do
 
   it "copies redux version of serverGlobals" do
     assert_file "client/app/startup/serverGlobals.jsx" do |contents|
-      assert_match(%r{import ReduxApp from './ServerReduxApp';}, contents)
-      assert_match(/global.ReduxApp = ReduxApp;/, contents)
+      assert_match(%r{import ReduxServerApp from './ServerReduxApp';}, contents)
+      assert_match(/global.ReduxServerApp = ReduxServerApp;/, contents)
     end
+  end
+
+  it "copies redux server rendering files" do
+    assert_file "client/app/startup/ServerReduxApp.jsx"
   end
 end
 
@@ -53,8 +57,8 @@ shared_examples ":redux:hello_world_example" do
 
   it "copies the Redux with hello world example version of hello_world/index.html.erb" do
     assert_file "app/views/hello_world/index.html.erb" do |contents|
-      assert_match(/react_component\("ReduxApp", trace: true\)/, contents)
-      refute_match(/react_component\("HelloWorld", trace: true\)/, contents)
+      assert_match(/react_component\("ReduxApp", {}, trace: true\)/, contents)
+      refute_match(/react_component\("HelloWorld", {}, trace: true\)/, contents)
     end
   end
 end
@@ -62,21 +66,12 @@ end
 shared_examples ":redux:server_rendering:hello_world_example" do
   include_examples ":redux:base"
   include_examples ":redux:hello_world_example"
-
-  it "copies redux server rendering files" do
-    assert_file "client/app/startup/ServerReduxApp.jsx"
-  end
-
-  it "copies the Redux with hello world example with server rendering version of hello_world/index.html.erb" do
-    assert_file "app/views/hello_world/index.html.erb" do |contents|
-      assert_match(/react_component\("ReduxApp", {}, prerender: true, trace: true\)/, contents)
-    end
-  end
+  include_examples ":redux:server_rendering"
 
   it "copies the redux with hello_world_example version of serverGlobals" do
     assert_file("client/app/startup/serverGlobals.jsx") do |contents|
-      assert_match(%r{import ReduxApp from './ServerReduxApp';}, contents)
-      assert_match(/global.ReduxApp = ReduxApp;/, contents)
+      assert_match(%r{import ReduxServerApp from './ServerReduxApp';}, contents)
+      assert_match(/global.ReduxServerApp = ReduxServerApp;/, contents)
       refute_match(/global.HelloWorldApp = HelloWorldApp;/, contents)
       refute_match(/global.MyReactComponent = MyReactComponent;/, contents)
       refute_match(%r{import HelloWorld from '../components/HelloWorld';}, contents)
