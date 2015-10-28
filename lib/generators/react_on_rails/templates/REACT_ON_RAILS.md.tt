@@ -4,7 +4,7 @@ The `react_on_rails` gem has been installed. You can view the documentation onli
 Also, check out the [example application](https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/server.js)
 for a live example and code.
 
-<%- if options.hello_world_example? %>
+<%- unless options.skip_hello_world_example? %>
 The "Hello World" example has been installed.
 
 The view is located at `app/views/hello_world/index.html.erb`

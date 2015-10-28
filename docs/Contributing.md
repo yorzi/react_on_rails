@@ -45,6 +45,9 @@ gem 'therubyracer'
 
 The main installer can be run with ```rails generate react_on_rails:install```
 
+### Testing the Generator
+The generators are covered by generator tests using Rails's generator testing helpers, but it never hurts to do a sanity check and explore the API. See [Generator Testing Script.md](Generator Testing Script.md) for a script on how to run the generator on a fresh project.
+
 ## Updating New Versions of the Gem
 
 See https://github.com/svenfuchs/gem-release

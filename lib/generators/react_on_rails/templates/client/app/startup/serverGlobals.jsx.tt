@@ -1,0 +1,21 @@
+// For an example on how to use serverGlobals, check out https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/app/startup
+
+<%- if options.redux? %>
+import ReduxApp from './ServerReduxApp';
+<%- elsif options.skip_hello_world_example? %>
+// Replace "MyReactComponent" with your actual component
+import MyReactComponent from '../components/MyReactComponent';
+<%- else %>
+import HelloWorld from '../components/HelloWorld';
+<%- end %>
+
+// We can use the node global object for exposing.
+// NodeJs: https://nodejs.org/api/globals.html#globals_global
+<%- if options.redux? %>
+global.ReduxApp = ReduxApp;
+<%- elsif options.skip_hello_world_example? %>
+// Replace "MyReactComponent" with your actual component
+global.MyReactComponent = MyReactComponent;
+<%- else %>
+global.HelloWorldApp = HelloWorldApp;
+<%- end %>

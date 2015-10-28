@@ -13,7 +13,12 @@ import middleware from 'redux-thunk';
 // Uses the index
 import reducers from '../reducers/reducersIndex';
 
+<%- if options.skip_hello_world_example? %>
+// Replace "MyReactComponent" with your actual component
+import MyReactComponent from '../components/MyReactComponent'
+<%- else %>
 import HelloWorldContainer from '../components/HelloWorldContainer';
+<%- end %>
 
 const ReduxApp = props => {
   const combinedReducer = combineReducers(reducers);
@@ -23,10 +28,15 @@ const ReduxApp = props => {
   const store = applyMiddleware(middleware)(createStore)(combinedReducer, props);
 
   // Provider uses the this.props.children, so we're not typical React syntax.
-  // This allows redux to add additional props to the HelloWorldContainer.
+  // This allows redux to add additional props to the React Component.
   return (
     <Provider store={store}>
+<%- if options.skip_hello_world_example? %>
+      // Replace "MyReactComponment" with your actual component
+      {() => <MyReactComponent />}
+<%- else %>
       {() => <HelloWorldContainer />}
+<%- end %>
     </Provider>
   );
 };

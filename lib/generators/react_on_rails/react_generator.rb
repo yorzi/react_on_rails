@@ -8,22 +8,24 @@ module ReactOnRails
       hide!
       source_root(File.expand_path("../templates", __FILE__))
 
-      # --with-redux
+      # --redux
       class_option :redux,
                    type: :boolean,
                    default: false,
-                   desc: "Include Redux package"
-      # --with-hello-world-example
-      class_option :hello_world_example,
+                   desc: "Setup Redux files",
+                   aliases: "-d"
+      # --skip-hello-world-example
+      class_option :skip_hello_world_example,
                    type: :boolean,
+                   aliases: "-H",
                    default: false,
-                   desc: "Include a simple Hello World Example. Note that this example's implementation varies " \
-                         "depending on the other options chosen."
-      # --with-server-rendering
+                   desc: "Don't include the Hello World example"
+      # --server-rendering
       class_option :server_rendering,
                    type: :boolean,
                    default: false,
-                   description: "Enable server-rendering"
+                   desc: "Configure for server-side rendering of webpack JavaScript",
+                   aliases: "-S"
 
       def symlink_client_assets_to_app_assets
         empty_directory("client/app/assets")
@@ -70,21 +72,27 @@ module ReactOnRails
       end
 
       def create_react_directories
-        dirs = %w(actions components constants middlewares startup utils)
+        dirs = %w(components startup utils)
         dirs.each { |name| empty_directory_with_keep_file("client/app/#{name}") }
       end
 
       def copy_base_files
-        template "react_on_rails.rb", "config/initializers/react_on_rails.rb"
-        %w(
-          lib/tasks/assets.rake
-          client/server.js
-          client/.babelrc
-          client/webpack.client.base.config.js
-          client/webpack.client.hot.config.js
-          client/webpack.client.rails.config.js
-        ).each { |file| copy_file(file) }
-        template("REACT_ON_RAILS.md.tt")
+        copy_file_and_missing_parent_directories("config/initializers/react_on_rails.rb")
+        %w(lib/tasks/assets.rake
+           client/server.js
+           client/.babelrc
+           client/webpack.client.base.config.js
+           client/webpack.client.hot.config.js
+           client/webpack.client.rails.config.js
+           client/npm-shrinkwrap.json
+           client/app/utils/ReactCompat.jsx).each { |file| copy_file(file) }
+      end
+
+      def template_base_files
+        %w(REACT_ON_RAILS.md.tt
+           client/app/startup/clientGlobals.jsx.tt
+           client/index.jade.tt
+           Procfile.dev.tt).each { |file| template(file) }
       end
 
       def copy_appropriate_package_json
@@ -92,29 +100,10 @@ module ReactOnRails
         copy_file(source, "client/package.json")
       end
 
-      def copy_appropriate_client_globals
-        base = options.hello_world_example? ? "hello_world_base/" : ""
-        copy_file("#{base}client/app/startup/clientGlobals.jsx", "client/app/startup/clientGlobals.jsx")
-      end
-
-      def copy_appropriate_server_globals
-        return unless options.server_rendering?
-        base = options.hello_world_example? ? "hello_world_server_render/" : ""
-        copy_file("#{base}client/app/startup/serverGlobals.jsx", "client/app/startup/serverGlobals.jsx")
-      end
-
-      def copy_appropriate_index_jade
-        base = options.hello_world_example? ? "hello_world_base/" : ""
-        copy_file("#{base}client/index.jade", "client/index.jade")
-      end
-
-      def copy_appropriate_procfile
-        template("Procfile.dev.tt")
-      end
-
       def install_server_rendering_files_if_enabled
         return unless options.server_rendering?
         copy_file("client/webpack.server.rails.config.js")
+        template("client/app/startup/serverGlobals.jsx.tt")
       end
     end
   end

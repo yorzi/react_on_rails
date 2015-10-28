@@ -4,11 +4,11 @@
 #   rails generate react_on_rails:install [options]
 #
 # Options:
-#   [--with-redux], [--no-with-redux]
+#   [--redux], [--no-redux]
 #     Indicates when to generate with redux
-#   [--with-hello-world-example], [--no-with-hello-world-example]
+#   [--hello-world-example], [--no-hello-world-example]
 #     Indicates when to generate with hello world example
-#   [--with-server-rendering], [--no-with-server-rendering]
+#   [--server-rendering], [--no-server-rendering]
 #     Indicates whether ability for server-side rendering of webpack output should be enabled
 #
 require "rails/generators"
@@ -16,29 +16,38 @@ require "rails/generators"
 module ReactOnRails
   module Generators
     class InstallGenerator < Rails::Generators::Base
-      # --with-redux
+      # --redux
       class_option :redux,
                    type: :boolean,
                    default: false,
-                   desc: "Include Redux package"
-      # --with-hello-world-example
-      class_option :hello_world_example,
+                   desc: "Setup Redux files",
+                   aliases: "-d"
+      # --skip-hello-world-example
+      class_option :skip_hello_world_example,
                    type: :boolean,
+                   aliases: "-H",
                    default: false,
-                   desc: "Include a simple Hello World Example. Note that this example's implementation varies\n"\
-                         "depending on the other options chosen (e.g. '--server-rendering')"
-      # --with-server-rendering
+                   desc: "Don't include the Hello World example"
+      # --server-rendering
       class_option :server_rendering,
                    type: :boolean,
                    default: false,
-                   desc: "Adds configuration files allowing for server-side rendering of webpack's JavaScript output"
+                   desc: "Configure for server-side rendering of webpack JavaScript",
+                   aliases: "-S"
+      # --skip-linters
+      class_option :skip_linters,
+                   type: :boolean,
+                   default: false,
+                   desc: "Don't install linter files",
+                   aliases: "-L"
 
       def run_generators
         return unless installation_prerequisites_met?
         warn_if_nvm_is_not_installed
         invoke "react_on_rails:react"
-        invoke "react_on_rails:linters"
-        invoke "react_on_rails:hello_world_example" if options.hello_world_example?
+        invoke "react_on_rails:redux" if options.redux?
+        invoke "react_on_rails:linters" unless options.skip_linters?
+        invoke "react_on_rails:hello_world_example" unless options.skip_hello_world_example?
       end
 
       private

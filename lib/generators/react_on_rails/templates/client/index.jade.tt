@@ -1,0 +1,21 @@
+//- See example: https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/index.jade
+doctype html
+html
+
+  head
+    title Hello, React
+
+  body
+
+    #app
+
+    script(src="vendor-bundle.js")
+    script(src="app-bundle.js")
+<%- if options.skip_hello_world_example? %>
+    //-script.
+      //- Change 'ComponentName' to the name of your React component!
+      React.render(ComponentName, document.getElementById('app'));
+<%- else %>
+    script.
+      React.render(HelloWorldApp, document.getElementById('app'))
+<%- end %>

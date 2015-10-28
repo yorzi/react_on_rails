@@ -1,0 +1,12 @@
+// For an example on how to use clientGlobals, check out:
+// https://github.com/shakacode/react-webpack-rails-tutorial/blob/master/client/app/startup
+
+<%- if options.redux? %>
+import ReduxApp from './ClientReduxApp';
+
+window.ReduxApp = ReduxApp;
+<%- elsif !options.skip_hello_world_example? %>
+import HelloWorld from '../components/HelloWorld';
+
+window.HelloWorld = HelloWorld;
+<%- end %>
